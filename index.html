@@ -1,210 +1,34 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>For You ❤️</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Landing Page</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <div class="page-wrapper">
-    <header class="site-header">
-      <h1>For My Love ❤️</h1>
-      <p class="subtitle">A little corner of the internet just for us</p>
-    </header>
-
-    <!-- MAIN LAYOUT: SIDEBAR + CONTENT -->
-    <div class="main-layout">
-      <!-- Sidebar Tabs -->
-      <nav class="sidebar">
-        <h2 class="sidebar-title">Menu</h2>
-        <button class="tab-button active" data-tab="letters">💌 Letters</button>
-        <button class="tab-button" data-tab="pictures">📸 Pictures</button>
-        <button class="tab-button" data-tab="milestones">🌟 Milestones</button>
-      </nav>
-
-      <!-- Tab Content Wrapper -->
-      <main class="tab-contents">
-     <!-- LETTERS TAB -->
-<section id="letters" class="tab-content active">
-  <div class="tab-header-row">
-    <h2>Letters to You</h2>
-    <div class="tab-actions" data-tab-actions="letters">
-      <button class="action-btn" data-action="add">Add</button>
-      <button class="action-btn" data-action="edit">Edit</button>
-      <button class="action-btn" data-action="archive">Archive</button>
+  <div class="container">
+    <div class="card">
+      <h1>Hello there, is there something I can help you with?</h1>
+      <div class="buttons">
+        <button id="yesBtn">Yes</button>
+        <button id="nothingBtn">Nothing</button>
+      </div>
     </div>
   </div>
 
-  <p class="intro-text">
-    I made this place to keep all the words I never want you to forget.
-  </p>
+<script>
+// Yes button goes to help page
+document.getElementById('yesBtn').addEventListener('click', () => {
+  window.location.href = 'help.html';
+});
 
-  <!-- Envelope Grid -->
-  <div class="envelope-grid">
-    <!-- Generate 15 envelopes -->
-    <!-- You can copy-paste this div 15 times or use JS to generate -->
-    <div class="envelope-wrapper" data-index="1">
-      <img src="images/close-card.png" alt="Envelope Closed" class="envelope-closed" />
-      <img src="images/open-card.png" alt="Envelope Open" class="envelope-open" />
-      <img src="images/paper-card.png" alt="Letter Paper" class="letter-paper" />
-    </div>
-    <div class="envelope-wrapper" data-index="2">
-      <img src="images/close-card.png" alt="Envelope Closed" class="envelope-closed" />
-      <img src="images/open-card.png" alt="Envelope Open" class="envelope-open" />
-      <img src="images/paper-card.png" alt="Letter Paper" class="letter-paper" />
-    </div>
-    <div class="envelope-wrapper" data-index="3">
-      <img src="images/close-card.png" alt="Envelope Closed" class="envelope-closed" />
-      <img src="images/open-card.png" alt="Envelope Open" class="envelope-open" />
-      <img src="images/paper-card.png" alt="Letter Paper" class="letter-paper" />
-    </div>
-    <!-- Repeat until 15 envelopes total -->
-    <!-- For brevity, you can copy this 5 times (3 envelopes per row × 5 rows = 15) -->
-  </div>
-</section>
-
-        <!-- PICTURES TAB -->
-        <section id="pictures" class="tab-content">
-          <div class="tab-header-row">
-            <h2>Our Pictures</h2>
-            <div class="tab-actions" data-tab-actions="pictures">
-              <button class="action-btn" data-action="add">Add</button>
-              <button class="action-btn" data-action="edit">Edit</button>
-              <button class="action-btn" data-action="archive">Archive</button>
-            </div>
-          </div>
-
-          <p class="intro-text">
-            Some of my favorite memories with you, frozen in time. 💫
-          </p>
-
-          <div class="gallery">
-            <figure class="gallery-item">
-              <img src="images/photo1.jpg" alt="Us together 1" />
-              <figcaption>That day we couldn’t stop laughing.</figcaption>
-            </figure>
-
-            <figure class="gallery-item">
-              <img src="images/photo2.jpg" alt="Us together 2" />
-              <figcaption>One of my favorite pictures of you.</figcaption>
-            </figure>
-
-            <figure class="gallery-item">
-              <img src="images/photo3.jpg" alt="Us together 3" />
-              <figcaption>A moment I never want to forget.</figcaption>
-            </figure>
-          </div>
-        </section>
-
-        <!-- MILESTONES TAB -->
-        <section id="milestones" class="tab-content">
-          <div class="tab-header-row">
-            <h2>Our Milestones</h2>
-          <div class="tab-actions" data-tab-actions="milestones">
-              <button class="action-btn" data-action="add">Add</button>
-              <button class="action-btn" data-action="edit">Edit</button>
-              <button class="action-btn" data-action="archive">Archive</button>
-            </div>
-          </div>
-
-          <p class="intro-text">
-            The big (and small) moments that tell our story. 💞
-          </p>
-
-          <div class="timeline">
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <p class="milestone-date">July 10, 2024</p>
-                <h3>We First Met</h3>
-                <p>
-                  Write about how you met. Where were you? What were you doing?
-                  What was going through your head? Add all the details that
-                  make this moment special.
-                </p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <p class="milestone-date">August 5, 2024</p>
-                <h3>Our First Date</h3>
-                <p>
-                  Describe your first date. The place, the vibes, the way you
-                  felt afterwards. You can even include little inside jokes here.
-                </p>
-              </div>
-            </div>
-
-            <div class="timeline-item">
-              <div class="timeline-dot"></div>
-              <div class="timeline-content">
-                <p class="milestone-date">December 25, 2024</p>
-                <h3>First Christmas Together</h3>
-                <p>
-                  Talk about that holiday, what you did, what made it memorable,
-                  and how it felt to spend it together.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </main>
-    </div>
-
-    <footer class="site-footer">
-      <p>
-        Made with ❤️ by
-        <span class="highlighted-name">[Your Name]</span>
-        for
-        <span class="highlighted-name">[Her Name]</span>
-      </p>
-    </footer>
-  </div>
-
-  <script src="script.js">
-// Envelope interaction
-document.addEventListener("DOMContentLoaded", function () {
-  const envelopeWrapper = document.querySelector(".envelope-wrapper");
-  if (!envelopeWrapper) return;
-
-  const closedImg = envelopeWrapper.querySelector(".envelope-closed");
-  const openImg = envelopeWrapper.querySelector(".envelope-open");
-  const paper = envelopeWrapper.querySelector(".envelope-paper");
-
-  let state = "closed"; // closed -> open -> paper
-
-  function updateState() {
-    envelopeWrapper.dataset.envelopeState = state;
-
-    closedImg.classList.remove("active");
-    openImg.classList.remove("active");
-    paper.classList.remove("active");
-
-    if (state === "closed") {
-      closedImg.classList.add("active");
-    } else if (state === "open") {
-      openImg.classList.add("active");
-    } else if (state === "paper") {
-      paper.classList.add("active");
-    }
-  }
-
-  envelopeWrapper.addEventListener("click", function () {
-    if (state === "closed") {
-      state = "open";
-    } else if (state === "open") {
-      state = "paper";
-    } else {
-      // keep on paper; if you want to reset, uncomment:
-      // state = "closed";
-    }
-    updateState();
-  });
-
-  updateState();
+// Nothing button moves away
+const nothingBtn = document.getElementById('nothingBtn');
+nothingBtn.addEventListener("mouseenter", () => {
+  const x = Math.floor(Math.random() * 300) - 150;
+  const y = Math.floor(Math.random() * 300) - 150;
+  nothingBtn.style.transform = `translate(${x}px, ${y}px)`;
 });
 </script>
 </body>

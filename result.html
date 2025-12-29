@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Result Page</title>
+<style>
+body {
+  font-family: system-ui, sans-serif;
+  text-align: center;
+  padding: 40px;
+  background: #ffe4f0;
+  color: #be123c;
+}
+
+h1 { margin-bottom: 20px; }
+
+#readyBtn {
+  background: none;
+  border: 2px solid #f97373;
+  border-radius: 12px;
+  padding: 12px 24px;
+  font-weight: 700;
+  color: #be123c;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  margin-top: 20px;
+}
+
+#readyBtn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(244, 114, 182, 0.4);
+}
+
+.gameBox {
+  margin-top: 30px;
+  padding: 20px;
+  border: 2px solid #f97373;
+  border-radius: 12px;
+  background: #fff;
+  color: #000;
+}
+</style>
+</head>
+<body>
+
+<h1>Your chosen game is:</h1>
+
+<!-- Text box showing game name and description -->
+<div id="gameContainer" class="gameBox">
+  Loading...
+</div>
+
+<!-- Ready button -->
+<button id="readyBtn">Let's go, my babyy?</button>
+
+<script>
+// Get the chosen card from query param
+function getQueryParam(name) {
+  const urlParams = new URLSearchParams(window.location.search);
+  return urlParams.get(name);
+}
+
+const choice = getQueryParam('choice');
+const readyBtn = document.getElementById('readyBtn');
+const gameContainer = document.getElementById('gameContainer');
+
+// Map card messages to game names/descriptions and actual game pages
+const gameMap = {
+  'I miss my babyy!': {
+    name: 'Maze Game',
+    desc: 'Navigate through the maze to reach your babyy!',
+    page: 'maze.html'
+  },
+  'I want to kiss my babyy!': {
+    name: 'Matching Game',
+    desc: 'Find the matching cards to kiss your babyy!',
+    page: 'matching.html'
+  },
+  'I want to hug my babyy': {
+    name: 'Crack the Code',
+    desc: 'Solve the vault to hug your babyy!',
+    page: 'crackcode.html'
+  },
+  'I want to see my babyy!': {
+    name: 'Puzzle Game',
+    desc: 'Complete the puzzle to see your babyy!',
+    page: 'puzzle.html'
+  },
+  'I want to cuddle my babyy': {
+    name: 'Pacman Inspired Game',
+    desc: 'Collect the hearts to cuddle your babyy!',
+    page: 'pacman.html'
+  }
+};
+
+// Show game name and description
+if (choice && gameMap[choice]) {
+  const gameInfo = gameMap[choice];
+  gameContainer.innerHTML = `<h2>${gameInfo.name}</h2><p>${gameInfo.desc}</p>`;
+} else {
+  gameContainer.innerHTML = `<p>No valid choice detected.</p>`;
+  readyBtn.style.display = 'none';
+}
+
+// Redirect to actual game page when ready button is clicked
+readyBtn.addEventListener('click', () => {
+  if (choice && gameMap[choice]) {
+    const gamePage = gameMap[choice].page;
+    window.location.href = gamePage;
+  }
+});
+</script>
+
+</body>
+</html>
