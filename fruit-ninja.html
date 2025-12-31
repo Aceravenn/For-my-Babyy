@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fruit & Heart Ninja</title>
+<style>
+body {
+  margin: 0;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+  background: linear-gradient(#400000, #800020);
+  color: white;
+}
+
+#gameContainer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  overflow: hidden;
+  touch-action: none; /* prevents scrolling on mobile while swiping */
+}
+
+.object {
+  position: absolute;
+  font-size: 60px;
+  user-select: none;
+  transition: transform 0.1s;
+}
+
+#scoreBoard {
+  position: absolute;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 24px;
+  text-align: center;
+  line-height: 1.5;
+}
+
+#message {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 32px;
+  text-align: center;
+  display: none;
+}
+
+#nextPage {
+  display: none;
+  margin-top: 20px;
+  padding: 10px 15px;
+  border-radius: 12px;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+  background: #ffe6ef;
+  color: #800020;
+  position: absolute;
+  top: 60%;
+  left: 50%;
+  transform: translateX(-50%);
+}
+</style>
+</head>
+<body>
+
+<div id="gameContainer">
+  <div id="scoreBoard">
+    Hearts Sliced: 0 / 0<br>
+    Fruits Sliced: 0 / 0
+  </div>
+  <div id="message">You're so good babyy, nice oneee!</div>
+  <button id="nextPage" onclick="window.location.href='nextpage.html'">
+    Click when you're ready to see the website babyy!
+  </button>
+</div>
+
+<script>
+const gameContainer = document.getElementById('gameContainer');
+const scoreBoard = document.getElementById('scoreBoard');
+const message = document.getElementById('message');
+const nextBtn = document.getElementById('nextPage');
+
+let heartScore = 0;
+let fruitScore = 0;
+let heartsGoal = Math.floor(Math.random() * 5) + 1; // 1-5
+let fruitsGoal = Math.floor(Math.random() * 21) + 10; // 10-30
+let currentHeart = null;
+
+const fruits = ['🍓','🍌','🍍','🍑','🍒'];
+
+const objects = []; // track objects for swipe detection
+
+function spawnObject(symbol, single=false, isHeart=false){
+  if(single && currentHeart) return;
+
+  const obj = document.createElement('div');
+  obj.classList.add('object');
+  obj.innerHTML = symbol;
+
+  const x = Math.random() * (window.innerWidth - 60);
+  const y = Math.random() * (window.innerHeight / 2);
+  obj.style.left = x + 'px';
+  obj.style.top = y + 'px';
+  gameContainer.appendChild(obj);
+
+  if(single) currentHeart = obj;
+  objects.push({el: obj, isHeart: isHeart});
+
+  let velocityX = (Math.random() - 0.5) * 1.5;
+  let velocityY = -(1 + Math.random() * 1.5);
+  const gravity = 0.03;
+
+  function move(){
+    const top = parseFloat(obj.style.top);
+    const left = parseFloat(obj.style.left);
+
+    if(top > window.innerHeight + 50 || left < -50 || left > window.innerWidth + 50){
+      obj.remove();
+      if(single) currentHeart = null;
+      const index = objects.findIndex(o => o.el === obj);
+      if(index > -1) objects.splice(index, 1);
+      return;
+    }
+
+    velocityY += gravity;
+    obj.style.top = top + velocityY + 'px';
+    obj.style.left = left + velocityX + 'px';
+
+    requestAnimationFrame(move);
+  }
+  move();
+}
+
+function updateScore(){
+  scoreBoard.innerHTML = `Hearts Sliced: ${heartScore} / ${heartsGoal}<br>Fruits Sliced: ${fruitScore} / ${fruitsGoal}`;
+}
+
+function spawnFruits() {
+  const count = Math.floor(Math.random()*3)+1;
+  for(let i=0;i<count;i++){
+    const fruit = fruits[Math.floor(Math.random()*fruits.length)];
+    spawnObject(fruit,false,false);
+  }
+}
+
+function spawnHearts() {
+  spawnObject('🤍', true, true);
+}
+
+function startGame(){
+  heartScore = 0;
+  fruitScore = 0;
+  updateScore();
+
+  setInterval(spawnFruits, 1200);
+  setInterval(() => { spawnHearts(); }, 5000);
+}
+
+function endGame(){
+  message.style.display = 'block';
+  nextBtn.style.display = 'inline-block';
+}
+
+// SWIPE DETECTION
+let lastX = 0;
+let lastY = 0;
+let isTouching = false;
+
+function sliceObjects(x, y){
+  objects.forEach(obj => {
+    const rect = obj.el.getBoundingClientRect();
+    if(x >= rect.left && x <= rect.right && y >= rect.top && y <= rect.bottom){
+      obj.el.remove();
+      const index = objects.findIndex(o => o.el === obj.el);
+      if(index > -1) objects.splice(index, 1);
+
+      if(obj.isHeart){
+        heartScore++;
+        if(currentHeart === obj.el) currentHeart = null;
+      } else {
+        fruitScore++;
+      }
+
+      updateScore();
+      if(heartScore >= heartsGoal && fruitScore >= fruitsGoal){
+        endGame();
+      }
+    }
+  });
+}
+
+// Mouse events
+gameContainer.addEventListener('mousedown', e => { isTouching = true; sliceObjects(e.clientX, e.clientY); });
+gameContainer.addEventListener('mousemove', e => { if(isTouching) sliceObjects(e.clientX, e.clientY); });
+gameContainer.addEventListener('mouseup', e => { isTouching = false; });
+
+// Touch events
+gameContainer.addEventListener('touchstart', e => {
+  isTouching = true;
+  const touch = e.touches[0];
+  sliceObjects(touch.clientX, touch.clientY);
+}, {passive:true});
+
+gameContainer.addEventListener('touchmove', e => {
+  if(!isTouching) return;
+  const touch = e.touches[0];
+  sliceObjects(touch.clientX, touch.clientY);
+}, {passive:true});
+
+gameContainer.addEventListener('touchend', e => { isTouching = false; });
+
+startGame();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crack The Code Babyyy!</title>
+
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(#400000, #800020);
+  height: 100vh;
+  color: white;
+}
+
+.game {
+  width: 95%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+h1 {
+  margin-top: 0;
+}
+
+#codeDisplay {
+  font-size: 30px;
+  letter-spacing: 10px;
+  margin: 15px 0;
+}
+
+.keypad {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+
+button {
+  padding: 15px;
+  font-size: 18px;
+  border-radius: 10px;
+  border: none;
+  background: white;
+  color: #800020;
+  font-weight: bold;
+}
+
+button:active {
+  transform: scale(0.95);
+}
+
+#checkBtn {
+  width: 100%;
+  margin-top: 10px;
+  background: #ffb3c6;
+}
+
+#message {
+  margin-top: 15px;
+  min-height: 40px;
+}
+
+.hidden {
+  display: none;
+}
+
+#nextPage {
+  margin-top: 15px;
+  background: #ffe6ef;
+}
+</style>
+</head>
+
+<body>
+
+<div class="game">
+  <h1>Crack the code to hug your babyy!</h1>
+  <p>Guess the 4-digit secret code</p>
+
+  <div id="codeDisplay">____</div>
+
+  <div class="keypad">
+    <button onclick="press(1)">1</button>
+    <button onclick="press(2)">2</button>
+    <button onclick="press(3)">3</button>
+    <button onclick="press(4)">4</button>
+    <button onclick="press(5)">5</button>
+    <button onclick="press(6)">6</button>
+    <button onclick="press(7)">7</button>
+    <button onclick="press(8)">8</button>
+    <button onclick="press(9)">9</button>
+    <button onclick="clearCode()">⌫</button>
+    <button onclick="press(0)">0</button>
+    <button onclick="backspace()">←</button>
+  </div>
+
+  <button id="checkBtn" onclick="checkCode()">Check Code</button>
+
+  <div id="message"></div>
+
+  <button id="nextPage" class="hidden"
+          onclick="window.location.href='nextpage.html'">
+          Click when you're ready to see the website babyy!
+  </button>
+</div>
+
+<script>
+// Generate unique 4-digit code on every refresh
+let secret = generateCode();
+let input = "";
+
+function generateCode(){
+  let digits = [];
+  while(digits.length < 4){
+    let n = Math.floor(Math.random() * 10);
+    if(!digits.includes(n)) digits.push(n);
+  }
+  return digits.join("");
+}
+
+function press(num){
+  if(input.length < 4){
+    input += num;
+    updateDisplay();
+  }
+}
+
+function updateDisplay(){
+  document.getElementById("codeDisplay").textContent =
+    input.padEnd(4, "_");
+}
+
+function backspace(){
+  input = input.slice(0,-1);
+  updateDisplay();
+}
+
+function clearCode(){
+  input = "";
+  updateDisplay();
+}
+
+function checkCode(){
+  if(input.length < 4){
+    document.getElementById("message").innerHTML =
+      "Enter 4 digits first!";
+    return;
+  }
+
+  if(input === secret){
+    document.getElementById("message").innerHTML =
+      "Nice one babyy! You cracked it!";
+    document.getElementById("nextPage").classList.remove("hidden");
+    return;
+  }
+
+  let result = "";
+  for(let i=0;i<4;i++){
+    if(input[i] === secret[i]) result += "✔️ ";
+    else if(secret.includes(input[i])) result += "❗ ";
+    else result += "❌ ";
+  }
+
+  document.getElementById("message").innerHTML =
+    "Result: " + result;
+  input = "";
+  updateDisplay();
+}
+</script>
+
+</body>
+</html>

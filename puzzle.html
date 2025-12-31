@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Puzzle Game babyy!</title>
+<style>
+body {
+  margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(#400000, #800020);
+  height: 100vh;
+  color: white;
+}
+
+.game {
+  width: 95%;
+  max-width: 420px;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 15px;
+  padding: 20px;
+  text-align: center;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 0 15px rgba(0,0,0,0.5);
+}
+
+h1 {
+  margin-top: 0;
+}
+
+#puzzle {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-gap: 8px;
+  margin: 15px 0;
+}
+
+.tile {
+  background: white;
+  color: #800020;
+  font-weight: bold;
+  font-size: 1.5rem;
+  border-radius: 8px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  height: 70px;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+
+#message {
+  margin-top: 15px;
+  min-height: 30px;
+}
+
+button {
+  margin-top: 10px;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+#shuffleBtn {
+  background: #ffb3c6;
+  color: #800020;
+}
+
+#nextPage {
+  display: none;
+  background: #ffe6ef;
+  color: #800020;
+}
+</style>
+</head>
+<body>
+
+<div class="game">
+  <h1>Puzzle Game</h1>
+  <p>Complete the puzzle to see your babyy!</p>
+
+  <div id="puzzle"></div>
+
+  <div id="message"></div>
+  <button id="shuffleBtn" onclick="shuffleTiles()">Shuffle</button>
+  <button id="nextPage" onclick="window.location.href='nextpage.html'">
+    Click when you're ready to see the website babyy!
+  </button>
+</div>
+
+<script>
+const puzzleEl = document.getElementById('puzzle');
+const messageEl = document.getElementById('message');
+const nextBtn = document.getElementById('nextPage');
+
+let tiles = [];
+
+function initPuzzle() {
+  tiles = [];
+  for (let i = 1; i <= 15; i++) tiles.push(i);
+  tiles.push(null); // empty spot
+  shuffleTiles(); // shuffle immediately on load
+}
+
+function renderPuzzle() {
+  puzzleEl.innerHTML = '';
+  tiles.forEach((tile, idx) => {
+    const div = document.createElement('div');
+    div.className = 'tile';
+    if(tile) div.textContent = tile;
+    else div.style.background = 'transparent';
+    div.dataset.index = idx;
+    div.addEventListener('click', () => moveTile(idx));
+    puzzleEl.appendChild(div);
+  });
+}
+
+function shuffleTiles() {
+  do {
+    tiles.sort(() => Math.random() - 0.5);
+  } while(!isSolvable(tiles));
+  renderPuzzle();
+  messageEl.textContent = '';
+  nextBtn.style.display = 'none';
+}
+
+function moveTile(idx) {
+  const emptyIdx = tiles.indexOf(null);
+  const rowEmpty = Math.floor(emptyIdx / 4);
+  const colEmpty = emptyIdx % 4;
+  const rowClick = Math.floor(idx / 4);
+  const colClick = idx % 4;
+
+  const isAdjacent = (rowEmpty === rowClick && Math.abs(colEmpty - colClick) === 1) ||
+                     (colEmpty === colClick && Math.abs(rowEmpty - rowClick) === 1);
+
+  if(isAdjacent){
+    [tiles[idx], tiles[emptyIdx]] = [tiles[emptyIdx], tiles[idx]];
+    renderPuzzle();
+    checkWin();
+  }
+}
+
+function checkWin() {
+  for(let i=0;i<15;i++){
+    if(tiles[i]!==i+1) return;
+  }
+  messageEl.textContent = "You're so good babyy, nice oneee!";
+  nextBtn.style.display = 'inline-block';
+}
+
+// Check if puzzle is solvable
+function isSolvable(array){
+  let inv = 0;
+  for(let i=0;i<15;i++){
+    for(let j=i+1;j<16;j++){
+      if(array[i] && array[j] && array[i]>array[j]) inv++;
+    }
+  }
+  const emptyRow = Math.floor(array.indexOf(null)/4);
+  return (inv + emptyRow) % 2 === 0;
+}
+
+initPuzzle();
+</script>
+
+</body>
+</html>
